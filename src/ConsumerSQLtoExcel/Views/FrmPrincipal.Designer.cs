@@ -32,7 +32,7 @@ namespace ConsumerSQLtoExcel
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPrincipal));
             PnRightSection = new Panel();
-            label3 = new Label();
+            LblScriptAtual = new Label();
             label4 = new Label();
             BtnSelecionarScript = new Button();
             LblFilename = new Label();
@@ -53,7 +53,7 @@ namespace ConsumerSQLtoExcel
             // PnRightSection
             // 
             PnRightSection.BackColor = Color.FromArgb(15, 15, 15);
-            PnRightSection.Controls.Add(label3);
+            PnRightSection.Controls.Add(LblScriptAtual);
             PnRightSection.Controls.Add(label4);
             PnRightSection.Controls.Add(BtnSelecionarScript);
             PnRightSection.Controls.Add(LblFilename);
@@ -65,15 +65,15 @@ namespace ConsumerSQLtoExcel
             PnRightSection.Size = new Size(200, 278);
             PnRightSection.TabIndex = 0;
             // 
-            // label3
+            // LblScriptAtual
             // 
-            label3.Font = new Font("Montserrat Medium", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.White;
-            label3.Location = new Point(20, 33);
-            label3.Name = "label3";
-            label3.Size = new Size(159, 52);
-            label3.TabIndex = 9;
-            label3.Text = "nenhum script selecionado";
+            LblScriptAtual.Font = new Font("Montserrat Medium", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            LblScriptAtual.ForeColor = Color.White;
+            LblScriptAtual.Location = new Point(20, 33);
+            LblScriptAtual.Name = "LblScriptAtual";
+            LblScriptAtual.Size = new Size(159, 52);
+            LblScriptAtual.TabIndex = 9;
+            LblScriptAtual.Text = "nenhum script selecionado";
             // 
             // label4
             // 
@@ -254,7 +254,7 @@ namespace ConsumerSQLtoExcel
         private Panel panel2;
         private FlowLayoutPanel FlowScripts;
         private Button BtnExit;
-        private Label label3;
+        private Label LblScriptAtual;
         private Label label4;
         private Button BtnSelecionarScript;
     }

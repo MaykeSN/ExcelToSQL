@@ -9,16 +9,16 @@ namespace ConsumerSQLtoExcel.Entities
         public string? ConnectionString { get; set; }
         [JsonProperty("table_name")]
         public string? TableName { get; set; }
+        [JsonProperty("sheet")]
+        public string Sheet { get; set; }
         [JsonProperty("columns")]
         public List<Columns> Columns { get; set; }
-
     }
     internal class Scripts 
     {
         [JsonProperty("all_scripts")]
         internal List<ScriptConfig>? AllScripts { get; set; }
     }
-
     internal class Columns
     {
         [JsonProperty("sql_column")]

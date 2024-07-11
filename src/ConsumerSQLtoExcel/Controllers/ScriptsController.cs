@@ -23,9 +23,9 @@ namespace ConsumerSQLtoExcel.Controllers
             return JsonConvert.DeserializeObject<Scripts>(jsonStr) ?? throw new NullReferenceException();
         }
 
-        internal static int CreateScript(string scriptName, string conString, string tableName, List<Columns> columns)
+        internal static int CreateScript(string scriptName, string conString, string tableName,string sheet , List<Columns> columns)
         {
-            string path = @"Configs\scripts";
+            string path = @"Configs\scripts.json";
 
             if (File.Exists(path))
             {
@@ -40,7 +40,8 @@ namespace ConsumerSQLtoExcel.Controllers
                         ScriptName = scriptName,
                         TableName = tableName,
                         ConnectionString = conString,
-                        Columns = columns
+                        Columns = columns,
+                        Sheet = sheet
                     };
 
                     scripts?.AllScripts?.Add(strConfigs);
@@ -58,7 +59,8 @@ namespace ConsumerSQLtoExcel.Controllers
                 ScriptName = scriptName,
                 TableName = tableName,
                 ConnectionString = conString,
-                Columns = columns
+                Columns = columns,
+                Sheet= sheet
             };
 
             var scrips = new Scripts

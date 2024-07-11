@@ -4,13 +4,13 @@ using ConsumerSQLtoExcel.Entities;
 using ConsumerSQLtoExcel.Exceptions;
 using ConsumerSQLtoExcel.Properties;
 using ConsumerSQLtoExcel.Views;
-using DocumentFormat.OpenXml.Office.CustomUI;
 using static ConsumerSQLtoExcel.Design.WindowsConfigs;
 namespace ConsumerSQLtoExcel
 {
     public partial class FrmPrincipal : Form
     {
         FoldersMap? foldersMap;
+        ScriptConfig? scriptConfig;
         public FrmPrincipal() => InitializeComponent();
 
         private void FrmPrincipal_Load(object sender, EventArgs e)
@@ -31,6 +31,19 @@ namespace ConsumerSQLtoExcel
             {
 
             }
+
+            if (!string.IsNullOrWhiteSpace(Settings.Default.ScriptInUse))
+            {
+                foreach (UcScript scr in FlowScripts.Controls)
+                {
+                    if (scr.IsActive)
+                    {
+                        scriptConfig = scr.GetScript();
+                    }
+                }
+            }
+
+            LblScriptAtual.Text = scriptConfig?.ScriptName ?? "Nenhum script selecionado";
         }
 
         private bool FillScripts(Scripts scripts, FlowLayoutPanel flow)
@@ -108,7 +121,11 @@ namespace ConsumerSQLtoExcel
         {
             if(new FrmModalCreateScript().ShowDialog() == DialogResult.OK)
             {
-
+                MessageBox.Show("Script criado com sucesso!", "Excel to SQL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Script cancelado!", "Excel to SQL", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

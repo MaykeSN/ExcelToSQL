@@ -2,6 +2,7 @@
 using ConsumerSQLtoExcel.Design.UsersControls;
 using ConsumerSQLtoExcel.Entities;
 using ConsumerSQLtoExcel.Exceptions;
+using ConsumerSQLtoExcel.Repositories;
 using DocumentFormat.OpenXml.Drawing;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace ConsumerSQLtoExcel.Views
     {
         private string? filePath;
         private Scripts Scripts;
+        List<Columns> cols = [];
         public FrmModalCreateScript()
         {
             InitializeComponent();
@@ -128,25 +130,49 @@ namespace ConsumerSQLtoExcel.Views
                 FlowColumns.Controls.Add(new ColumnsControl(column));
             }
 
-            BtnSalvarColunas.Visible = true;
         }
 
         private void BtnSalvarColunasClick(object sender, EventArgs e)
         {
-            if (!ValidateControls(FlowColumns)) 
+            if (!ValidateControls(FlowColumns))
             {
                 MessageBox.Show("Faltam colunas a serem preenchidas", "SQL to Excel", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                return; 
+                return;
             }
 
-            List<Columns> cols = [];
+           
+        }
 
-            foreach (ColumnsControl cc in FlowColumns.Controls)
+        private void BtnSalvarClick(object sender, EventArgs e)
+        {
+            if (RepositorieBase.IsConnectionString(TxtConnectionString.Text) == false)
             {
-                cols.Add(cc.GetColumns());
+                MessageBox.Show("Insira uma string de conexão valida!", "Excel to SQL", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                return ;
             }
 
-            ScriptsController.CreateScript(TxtNomeScript.Text.Trim(), TxtConnectionString.Text.Trim(), TxtTableName.Text.Trim(), cols);
+            if (ValidateControls(FlowColumns) && ValidateTextBox(PnTextBox))
+            {
+                cols.Clear();
+
+                foreach (ColumnsControl cc in FlowColumns.Controls)
+                {
+                    cols.Add(cc.GetColumns());
+                }
+
+                ScriptsController.CreateScript(TxtNomeScript.Text, TxtConnectionString.Text.Trim(), TxtTableName.Text.Trim(), CbxSheets.Text.Trim(), cols);
+                DialogResult = DialogResult.OK;
+                Close();
+                return;
+            }
+
+            MessageBox.Show("Ha campos que precisam ser preenchidos", "Excel to SQL", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+        }
+
+        private void BtnExitClick(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

@@ -30,6 +30,7 @@
         {
             BtnExit = new Button();
             PnTextBox = new Panel();
+            label6 = new Label();
             TxtTableName = new TextBox();
             label2 = new Label();
             TxtConnectionString = new TextBox();
@@ -49,7 +50,6 @@
             FlowColumns = new FlowLayoutPanel();
             LblLoading = new Label();
             TxtPreviewQuery = new RichTextBox();
-            BtnSalvarColunas = new Button();
             PnTextBox.SuspendLayout();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
@@ -71,26 +71,39 @@
             BtnExit.TabIndex = 9;
             BtnExit.Text = "Voltar";
             BtnExit.UseVisualStyleBackColor = false;
+            BtnExit.Click += BtnExitClick;
             // 
             // PnTextBox
             // 
             PnTextBox.BackColor = Color.FromArgb(30, 30, 30);
+            PnTextBox.Controls.Add(label6);
             PnTextBox.Controls.Add(TxtTableName);
             PnTextBox.Controls.Add(label2);
             PnTextBox.Controls.Add(TxtConnectionString);
             PnTextBox.Controls.Add(label1);
             PnTextBox.Controls.Add(TxtNomeScript);
             PnTextBox.Controls.Add(label4);
-            PnTextBox.Location = new Point(24, 25);
+            PnTextBox.Location = new Point(24, 12);
             PnTextBox.Name = "PnTextBox";
-            PnTextBox.Size = new Size(384, 226);
+            PnTextBox.Size = new Size(384, 239);
             PnTextBox.TabIndex = 10;
+            // 
+            // label6
+            // 
+            label6.BackColor = Color.FromArgb(30, 30, 30);
+            label6.Font = new Font("Montserrat SemiBold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label6.ForeColor = Color.Silver;
+            label6.Location = new Point(16, 138);
+            label6.Name = "label6";
+            label6.Size = new Size(349, 23);
+            label6.TabIndex = 18;
+            label6.Text = "Ex: host;database;user;password";
             // 
             // TxtTableName
             // 
             TxtTableName.BorderStyle = BorderStyle.FixedSingle;
             TxtTableName.Font = new Font("Montserrat SemiBold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            TxtTableName.Location = new Point(18, 171);
+            TxtTableName.Location = new Point(18, 194);
             TxtTableName.Name = "TxtTableName";
             TxtTableName.Size = new Size(349, 33);
             TxtTableName.TabIndex = 17;
@@ -100,7 +113,7 @@
             label2.BackColor = Color.FromArgb(80, 80, 80);
             label2.Font = new Font("Montserrat SemiBold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.White;
-            label2.Location = new Point(18, 146);
+            label2.Location = new Point(18, 169);
             label2.Name = "label2";
             label2.Size = new Size(150, 31);
             label2.TabIndex = 16;
@@ -161,6 +174,7 @@
             BtnSalvar.TabIndex = 11;
             BtnSalvar.Text = "Salvar Script";
             BtnSalvar.UseVisualStyleBackColor = false;
+            BtnSalvar.Click += BtnSalvarClick;
             // 
             // panel1
             // 
@@ -294,30 +308,12 @@
             TxtPreviewQuery.BorderStyle = BorderStyle.None;
             TxtPreviewQuery.Font = new Font("Montserrat Medium", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             TxtPreviewQuery.ForeColor = Color.Gray;
-            TxtPreviewQuery.Location = new Point(22, 526);
+            TxtPreviewQuery.Location = new Point(22, 470);
             TxtPreviewQuery.Name = "TxtPreviewQuery";
             TxtPreviewQuery.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
-            TxtPreviewQuery.Size = new Size(933, 86);
+            TxtPreviewQuery.Size = new Size(933, 142);
             TxtPreviewQuery.TabIndex = 29;
             TxtPreviewQuery.Text = "INSERT INTO TABELA (ID, DATETIME, CURRENT TIME, ITEM_LIST) VALUES (123, 432423, 432432, 432432)";
-            // 
-            // BtnSalvarColunas
-            // 
-            BtnSalvarColunas.BackColor = Color.FromArgb(0, 192, 192);
-            BtnSalvarColunas.Cursor = Cursors.Hand;
-            BtnSalvarColunas.FlatAppearance.BorderSize = 0;
-            BtnSalvarColunas.FlatStyle = FlatStyle.Flat;
-            BtnSalvarColunas.Font = new Font("Montserrat SemiBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtnSalvarColunas.ForeColor = Color.FromArgb(19, 19, 19);
-            BtnSalvarColunas.ImageAlign = ContentAlignment.MiddleRight;
-            BtnSalvarColunas.Location = new Point(771, 445);
-            BtnSalvarColunas.Name = "BtnSalvarColunas";
-            BtnSalvarColunas.Size = new Size(202, 39);
-            BtnSalvarColunas.TabIndex = 30;
-            BtnSalvarColunas.Text = "Salvar Colunas";
-            BtnSalvarColunas.UseVisualStyleBackColor = false;
-            BtnSalvarColunas.Visible = false;
-            BtnSalvarColunas.Click += BtnSalvarColunasClick;
             // 
             // FrmModalCreateScript
             // 
@@ -325,7 +321,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(19, 19, 19);
             ClientSize = new Size(985, 678);
-            Controls.Add(BtnSalvarColunas);
             Controls.Add(TxtPreviewQuery);
             Controls.Add(FlowColumns);
             Controls.Add(panel3);
@@ -370,7 +365,7 @@
         private ComboBox CbxSheets;
         private FlowLayoutPanel FlowColumns;
         private RichTextBox TxtPreviewQuery;
-        private Button BtnSalvarColunas;
         private Label LblLoading;
+        private Label label6;
     }
 }

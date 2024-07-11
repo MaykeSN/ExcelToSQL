@@ -1,4 +1,5 @@
 ﻿using ConsumerSQLtoExcel.Entities;
+using ConsumerSQLtoExcel.Properties;
 namespace ConsumerSQLtoExcel.Design.UsersControls
 {
     public partial class UcScript : UserControl
@@ -12,6 +13,7 @@ namespace ConsumerSQLtoExcel.Design.UsersControls
             ScriptConfig = scriptConfig;
             RandomColor();
             FlowParent = flowParent;
+            LblScriptName.Text = scriptConfig.ScriptName;
         }
         private void RandomColor()
         {
@@ -46,7 +48,9 @@ namespace ConsumerSQLtoExcel.Design.UsersControls
             }
 
             IsActive = true;
-            this.BorderStyle = BorderStyle.Fixed3D;
+            BorderStyle = BorderStyle.Fixed3D;
+            Settings.Default.ScriptInUse = ScriptConfig.ScriptName;
+            Settings.Default.Save();
         }
     }
 }
