@@ -9,19 +9,8 @@ using System.Threading.Tasks;
 
 namespace ConsumerSQLtoExcel.Repositories
 {
-    internal class InsertControl : IInsertable
+    internal class InsertControl 
     {
-        public int InsertAllSheet(ScriptConfig config, string connectionString, string previewQuery)
-        {
-            using MySqlConnection con = RepositorieBase.GetConnection(RepositorieBase.GetConnectionString(connectionString));
-            using MySqlCommand cmd = new();
-            cmd.Connection = con;
-
-
-
-
-
-            return 0;
-        }
+        
     }
 }

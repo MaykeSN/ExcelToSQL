@@ -30,6 +30,7 @@ namespace ConsumerSQLtoExcel
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPrincipal));
             PnRightSection = new Panel();
             LblScriptAtual = new Label();
@@ -40,13 +41,22 @@ namespace ConsumerSQLtoExcel
             panel1 = new Panel();
             BtnSelecionar = new Button();
             PnSectionBotton = new Panel();
+            CkbFirstLine = new CheckBox();
+            LblStatus = new Label();
+            label3 = new Label();
+            PicStartImage = new PictureBox();
+            PgBarProcess = new ProgressBar();
             pictureBox1 = new PictureBox();
             label1 = new Label();
             FrmRounded = new ElipseControl();
             panel2 = new Panel();
             FlowScripts = new FlowLayoutPanel();
             BtnExit = new Button();
+            TimerScriptChanged = new System.Windows.Forms.Timer(components);
+            TimerIsAllOk = new System.Windows.Forms.Timer(components);
             PnRightSection.SuspendLayout();
+            PnSectionBotton.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)PicStartImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -150,10 +160,67 @@ namespace ConsumerSQLtoExcel
             // PnSectionBotton
             // 
             PnSectionBotton.BackColor = Color.FromArgb(15, 15, 15);
+            PnSectionBotton.Controls.Add(CkbFirstLine);
+            PnSectionBotton.Controls.Add(LblStatus);
+            PnSectionBotton.Controls.Add(label3);
+            PnSectionBotton.Controls.Add(PicStartImage);
+            PnSectionBotton.Controls.Add(PgBarProcess);
             PnSectionBotton.Location = new Point(209, 316);
             PnSectionBotton.Name = "PnSectionBotton";
             PnSectionBotton.Size = new Size(762, 118);
             PnSectionBotton.TabIndex = 2;
+            // 
+            // CkbFirstLine
+            // 
+            CkbFirstLine.AutoSize = true;
+            CkbFirstLine.Font = new Font("Montserrat Medium", 8.999999F, FontStyle.Bold);
+            CkbFirstLine.ForeColor = Color.White;
+            CkbFirstLine.Location = new Point(117, 47);
+            CkbFirstLine.Name = "CkbFirstLine";
+            CkbFirstLine.Size = new Size(273, 20);
+            CkbFirstLine.TabIndex = 12;
+            CkbFirstLine.Text = "Deseja pular a primeira linha da planilha ?";
+            CkbFirstLine.UseVisualStyleBackColor = true;
+            // 
+            // LblStatus
+            // 
+            LblStatus.Font = new Font("Montserrat SemiBold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            LblStatus.ForeColor = Color.Yellow;
+            LblStatus.Location = new Point(238, 17);
+            LblStatus.Name = "LblStatus";
+            LblStatus.Size = new Size(470, 21);
+            LblStatus.TabIndex = 10;
+            LblStatus.Text = "AGUARDANDO";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Montserrat SemiBold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(111, 17);
+            label3.Name = "label3";
+            label3.Size = new Size(126, 21);
+            label3.TabIndex = 11;
+            label3.Text = "STATUS ATUAL:";
+            // 
+            // PicStartImage
+            // 
+            PicStartImage.Cursor = Cursors.Hand;
+            PicStartImage.Image = Properties.Resources.go_image;
+            PicStartImage.Location = new Point(15, 14);
+            PicStartImage.Name = "PicStartImage";
+            PicStartImage.Size = new Size(90, 90);
+            PicStartImage.SizeMode = PictureBoxSizeMode.StretchImage;
+            PicStartImage.TabIndex = 1;
+            PicStartImage.TabStop = false;
+            PicStartImage.Click += PicStartImageClick;
+            // 
+            // PgBarProcess
+            // 
+            PgBarProcess.Location = new Point(111, 75);
+            PgBarProcess.Name = "PgBarProcess";
+            PgBarProcess.Size = new Size(570, 29);
+            PgBarProcess.TabIndex = 0;
             // 
             // pictureBox1
             // 
@@ -217,6 +284,17 @@ namespace ConsumerSQLtoExcel
             BtnExit.UseVisualStyleBackColor = false;
             BtnExit.Click += BtnExit_Click;
             // 
+            // TimerScriptChanged
+            // 
+            TimerScriptChanged.Interval = 1000;
+            TimerScriptChanged.Tick += TimerScriptChangedTick;
+            // 
+            // TimerIsAllOk
+            // 
+            TimerIsAllOk.Enabled = true;
+            TimerIsAllOk.Interval = 500;
+            TimerIsAllOk.Tick += TimerIsAllOkTick;
+            // 
             // FrmPrincipal
             // 
             AutoScaleMode = AutoScaleMode.None;
@@ -237,6 +315,9 @@ namespace ConsumerSQLtoExcel
             MouseMove += FrmPrincipalMouseMove;
             PnRightSection.ResumeLayout(false);
             PnRightSection.PerformLayout();
+            PnSectionBotton.ResumeLayout(false);
+            PnSectionBotton.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)PicStartImage).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -258,5 +339,13 @@ namespace ConsumerSQLtoExcel
         private Label LblScriptAtual;
         private Label label4;
         private Button BtnSelecionarScript;
+        private System.Windows.Forms.Timer TimerScriptChanged;
+        private ProgressBar PgBarProcess;
+        private Label LblStatus;
+        private Label label5;
+        private Label label3;
+        private PictureBox PicStartImage;
+        private System.Windows.Forms.Timer TimerIsAllOk;
+        private CheckBox CkbFirstLine;
     }
 }

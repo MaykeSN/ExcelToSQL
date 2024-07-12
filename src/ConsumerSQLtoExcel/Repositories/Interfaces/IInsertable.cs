@@ -3,6 +3,6 @@ namespace ConsumerSQLtoExcel.Repositories.Interfaces
 {
     internal interface IInsertable
     {
-        int InsertAllSheet(ScriptConfig config, string connectionString, string previewQuery);
+        int InsertDataFromExcelToDatabase(List<Dictionary<string, string>> data, string query);
     }
 }

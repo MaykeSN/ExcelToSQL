@@ -12,6 +12,8 @@ namespace ConsumerSQLtoExcel
     {
         FoldersMap? foldersMap;
         ScriptConfig? scriptConfig;
+        bool flagProcess = false;
+        string query = string.Empty;
         public FrmPrincipal() => InitializeComponent();
 
         private void FrmPrincipal_Load(object sender, EventArgs e)
@@ -45,9 +47,10 @@ namespace ConsumerSQLtoExcel
             }
 
             LblScriptAtual.Text = scriptConfig?.ScriptName ?? "Nenhum script selecionado";
+            TimerScriptChanged.Start();
         }
 
-        private bool FillScripts(Scripts scripts, FlowLayoutPanel flow)
+        private static bool FillScripts(Scripts scripts, FlowLayoutPanel flow)
         {
             if (scripts is null)
             {
@@ -63,6 +66,8 @@ namespace ConsumerSQLtoExcel
             {
                 return false;
             }
+
+            flow.Controls.Clear();
 
             foreach (var script in scripts.AllScripts)
             {
@@ -122,6 +127,7 @@ namespace ConsumerSQLtoExcel
         {
             if (new FrmModalCreateScript().ShowDialog() == DialogResult.OK)
             {
+                _ = FillScripts(ScriptsController.GetAllScripts(), FlowScripts);
                 MessageBox.Show("Script criado com sucesso!", "Excel to SQL", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -130,9 +136,80 @@ namespace ConsumerSQLtoExcel
             }
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private async void pictureBox1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(QueryBuilder.GetQueryString(scriptConfig));
+
+        }
+
+        private void FlowScripts_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Test");
+        }
+
+        private void TimerScriptChangedTick(object sender, EventArgs e)
+        {
+            if (Settings.Default.ScriptInUse != scriptConfig.ScriptName)
+            {
+                foreach (UcScript scr in FlowScripts.Controls)
+                {
+                    if (scr.IsActive)
+                    {
+                        scriptConfig = scr.GetScript();
+                    }
+                }
+            }
+
+            LblScriptAtual.Text = scriptConfig?.ScriptName ?? "Nenhum script selecionado";
+        }
+
+        private void TimerIsAllOkTick(object sender, EventArgs e)
+        {
+            if (scriptConfig is not null)
+            {
+                if (foldersMap is not null)
+                {
+                    if (foldersMap.Folders is not null)
+                    {
+                        if (foldersMap.Folders[0] is not null)
+                        {
+                            PnSectionBotton.Visible = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        private async void PicStartImageClick(object sender, EventArgs e)
+        {
+            ChangeStep();
+
+            var data = await ExcelController.GetDataExcelAsync(foldersMap.Folders[0].Path, scriptConfig, CkbFirstLine.Checked, PgBarProcess);
+            query = QueryBuilder.BuildInsertQuery(scriptConfig, data);
+
+            if(query != string.Empty)
+            {
+                flagProcess = true;
+                ChangeStep();
+            }
+        }
+
+        private void ChangeStep()
+        {
+            if (flagProcess)
+            {
+                PicStartImage.Image = Resources.go_image;
+                PicStartImage.Cursor = Cursors.Hand;
+                LblStatus.Text = "CONCLUIDO";
+                LblStatus.ForeColor = Color.Green;
+                flagProcess = false;
+                return;
+            }
+
+            query = string.Empty;
+            PicStartImage.Image = Resources.anime_gif;
+            PicStartImage.Cursor = Cursors.WaitCursor;
+            LblStatus.Text = "PROCESSANDO";
+            LblStatus.ForeColor = Color.Gold;
         }
     }
 }

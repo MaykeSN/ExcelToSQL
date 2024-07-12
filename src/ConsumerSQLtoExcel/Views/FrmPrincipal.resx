@@ -159,4 +159,10 @@
         ieEee7+hmF4mi7iPl/iCet7e4i6msH4N29SHSOQHM7YYfzM8BAQAAAAASUVORK5CYII=
 </value>
   </data>
+  <metadata name="TimerScriptChanged.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>140, 17</value>
+  </metadata>
+  <metadata name="TimerIsAllOk.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>302, 17</value>
+  </metadata>
 </root>

@@ -1,4 +1,5 @@
 ﻿using ConsumerSQLtoExcel.Entities;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,38 @@ namespace ConsumerSQLtoExcel.Helpers
             }
 
             sb.Append(");");
+
+            return sb.ToString();
+        }
+
+        public static string BuildInsertQuery(ScriptConfig config, List<Dictionary<string, string>> data)
+        {
+            var sb = new StringBuilder();
+
+            // Construir a parte inicial do INSERT com as colunas
+            sb.AppendFormat("INSERT INTO {0} (", config.TableName);
+            foreach (var column in config.Columns)
+            {
+                sb.AppendFormat("{0}, ", column.SqlColumn);
+            }
+            sb.Length -= 2; // Remove a última vírgula e espaço
+            sb.Append(") VALUES ");
+
+            // Adicionar os valores
+            foreach (var row in data)
+            {
+                sb.Append("(");
+                foreach (var column in config.Columns)
+                {
+                    var value = row[column.SqlColumn];
+                    sb.AppendFormat("'{0}', ", MySqlHelper.EscapeString(value));
+                }
+                sb.Length -= 2; // Remove a última vírgula e espaço
+                sb.Append("), ");
+            }
+            sb.Length -= 2; // Remove a última vírgula e espaço
+
+            sb.Append(';');
 
             return sb.ToString();
         }
