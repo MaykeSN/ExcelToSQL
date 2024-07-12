@@ -1,4 +1,6 @@
-﻿namespace ConsumerSQLtoExcel.Repositories
+﻿using MySql.Data.MySqlClient;
+
+namespace ConsumerSQLtoExcel.Repositories
 {
     internal class RepositorieBase
     {
@@ -46,8 +48,7 @@
 
             return true;
         }
-
-        public string GetConnectionString(string con)
+        public static string GetConnectionString(string con)
         {
             string connection = ConnectionStringBase;
 
@@ -59,6 +60,10 @@
             connection = connection.Replace("[password]", strings[3]);
 
             return connection;
+        }
+        public static MySqlConnection GetConnection(string conString)
+        {
+            return new MySqlConnection(conString);
         }
     }
 }

@@ -39,7 +39,6 @@
             label4 = new Label();
             BtnSalvar = new Button();
             panel1 = new Panel();
-            CBoxFirstLine = new CheckBox();
             BtnSelecionar = new Button();
             LblFilename = new Label();
             label5 = new Label();
@@ -179,7 +178,6 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(30, 30, 30);
-            panel1.Controls.Add(CBoxFirstLine);
             panel1.Controls.Add(BtnSelecionar);
             panel1.Controls.Add(LblFilename);
             panel1.Controls.Add(label5);
@@ -187,17 +185,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(517, 101);
             panel1.TabIndex = 20;
-            // 
-            // CBoxFirstLine
-            // 
-            CBoxFirstLine.AutoSize = true;
-            CBoxFirstLine.Font = new Font("Montserrat Medium", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            CBoxFirstLine.Location = new Point(8, 64);
-            CBoxFirstLine.Name = "CBoxFirstLine";
-            CBoxFirstLine.Size = new Size(252, 25);
-            CBoxFirstLine.TabIndex = 25;
-            CBoxFirstLine.Text = "Deseja pular a primeira linha?";
-            CBoxFirstLine.UseVisualStyleBackColor = true;
             // 
             // BtnSelecionar
             // 
@@ -221,7 +208,7 @@
             LblFilename.ForeColor = Color.White;
             LblFilename.Location = new Point(6, 28);
             LblFilename.Name = "LblFilename";
-            LblFilename.Size = new Size(338, 44);
+            LblFilename.Size = new Size(338, 61);
             LblFilename.TabIndex = 23;
             LblFilename.Text = "Nenhum arquivo selecionado";
             // 
@@ -358,7 +345,6 @@
         private Button BtnSelecionar;
         private Label LblFilename;
         private Label label5;
-        private CheckBox CBoxFirstLine;
         private Panel panel3;
         private Label label3;
         private Button BtnSelecionarSheet;

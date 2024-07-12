@@ -2,6 +2,7 @@ using ConsumerSQLtoExcel.Controllers;
 using ConsumerSQLtoExcel.Design.UsersControls;
 using ConsumerSQLtoExcel.Entities;
 using ConsumerSQLtoExcel.Exceptions;
+using ConsumerSQLtoExcel.Helpers;
 using ConsumerSQLtoExcel.Properties;
 using ConsumerSQLtoExcel.Views;
 using static ConsumerSQLtoExcel.Design.WindowsConfigs;
@@ -24,7 +25,7 @@ namespace ConsumerSQLtoExcel
                 LblFilename.Text = foldersMap.Folders[0].Filename
                                    ?? "Nenhum arquivo selecionado";
 
-                 _ = FillScripts(ScriptsController.GetAllScripts(), FlowScripts);
+                _ = FillScripts(ScriptsController.GetAllScripts(), FlowScripts);
 
             }
             catch
@@ -48,22 +49,22 @@ namespace ConsumerSQLtoExcel
 
         private bool FillScripts(Scripts scripts, FlowLayoutPanel flow)
         {
-            if(scripts is null)
+            if (scripts is null)
             {
                 return false;
             }
 
-            if (scripts.AllScripts is null) 
-            { 
-                return false;
-            }
-
-            if(scripts.AllScripts.Count == 0)
+            if (scripts.AllScripts is null)
             {
                 return false;
             }
 
-            foreach (var script in scripts.AllScripts) 
+            if (scripts.AllScripts.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (var script in scripts.AllScripts)
             {
                 var uc = new UcScript(script, flow);
 
@@ -119,7 +120,7 @@ namespace ConsumerSQLtoExcel
 
         private void BtnSelecionarScriptClick(object sender, EventArgs e)
         {
-            if(new FrmModalCreateScript().ShowDialog() == DialogResult.OK)
+            if (new FrmModalCreateScript().ShowDialog() == DialogResult.OK)
             {
                 MessageBox.Show("Script criado com sucesso!", "Excel to SQL", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -127,6 +128,11 @@ namespace ConsumerSQLtoExcel
             {
                 MessageBox.Show("Script cancelado!", "Excel to SQL", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(QueryBuilder.GetQueryString(scriptConfig));
         }
     }
 }
