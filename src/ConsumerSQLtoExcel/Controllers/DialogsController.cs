@@ -55,7 +55,17 @@ namespace ConsumerSQLtoExcel.Controllers
 
         public static FoldersMap GetAllFilesCsvXlsx()
         {
-            string json = File.ReadAllText(@"Configs\configs_folders.json");
+            string path = @"Configs\configs_folders.json";
+            string json = "";
+            if (File.Exists(path))
+            {
+                json = File.ReadAllText(path);
+            }
+            else
+            {
+                throw new FilesControllersException("Falha ao encontrar arquivo de configuração de pacote");
+            }
+
             var map = JsonConvert.DeserializeObject<FoldersMap>(json) ?? throw new FilesControllersException("Falha ao encontrar obter arquivos de configs_folders");
 
             if (map.Folders is null) { throw new FilesControllersException("Não ha historico de arquivos, selecione um arquivo!"); }

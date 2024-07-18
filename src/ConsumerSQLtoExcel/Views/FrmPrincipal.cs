@@ -4,18 +4,25 @@ using ConsumerSQLtoExcel.Entities;
 using ConsumerSQLtoExcel.Exceptions;
 using ConsumerSQLtoExcel.Helpers;
 using ConsumerSQLtoExcel.Properties;
+using ConsumerSQLtoExcel.Repositories;
 using ConsumerSQLtoExcel.Views;
+using DocumentFormat.OpenXml.Office2019.Presentation;
+using MySql.Data.MySqlClient;
 using static ConsumerSQLtoExcel.Design.WindowsConfigs;
+using Timer = System.Windows.Forms.Timer;
 namespace ConsumerSQLtoExcel
 {
     public partial class FrmPrincipal : Form
     {
+        #region Variaveis
         FoldersMap? foldersMap;
         ScriptConfig? scriptConfig;
         bool flagProcess = false;
         string query = string.Empty;
+        bool checkFile = false, checkScript = false, checkCon = false;
+        List<MySqlParameter> parameters;
+        #endregion
         public FrmPrincipal() => InitializeComponent();
-
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
             try
@@ -50,6 +57,68 @@ namespace ConsumerSQLtoExcel
             TimerScriptChanged.Start();
         }
 
+        private void TimerCode_Tick(object? sender, EventArgs e)
+        {
+            MessageBox.Show("Test");
+        }
+
+        #region Timers
+        private async void TimerIsAllOkTick(object sender, EventArgs e)
+        {
+            TimerIsAllOk.Stop();
+
+            if (scriptConfig is not null)
+            {
+                checkScript = true;
+                if (foldersMap is not null)
+                {
+                    if (foldersMap.Folders is not null)
+                    {
+                        if (foldersMap.Folders[0] is not null)
+                        {
+                            checkFile = true;
+                            string con = RepositorieBase.GetConnectionString(scriptConfig.ConnectionString);
+                            var result = await RepositorieBase.IsOkConnection(con);
+
+                            TimerIsAllOk.Enabled = false;
+
+                            if (result)
+                            {
+                                checkCon = true;
+                                PnSectionBotton.Visible = true;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            UpdateChecks();
+        }
+        private void TimerScriptChangedTick(object sender, EventArgs e)
+        {
+            if (Settings.Default.ScriptInUse != scriptConfig.ScriptName)
+            {
+                foreach (UcScript scr in FlowScripts.Controls)
+                {
+                    if (scr.IsActive)
+                    {
+                        scriptConfig = scr.GetScript();
+                    }
+                }
+            }
+
+            LblScriptAtual.Text = scriptConfig?.ScriptName ?? "Nenhum script selecionado";
+        }
+        #endregion
+
+        #region Metodos
+        private void UpdateChecks()
+        {
+            CkArquivoSelecionado.Checked = checkFile;
+            CkConexao.Checked = checkCon;
+            CkScript.Checked = checkScript;
+        }
         private static bool FillScripts(Scripts scripts, FlowLayoutPanel flow)
         {
             if (scripts is null)
@@ -83,6 +152,27 @@ namespace ConsumerSQLtoExcel
 
             return true;
         }
+        private void ChangeStep()
+        {
+            if (flagProcess)
+            {
+                PicStartImage.Image = Resources.go_image;
+                PicStartImage.Cursor = Cursors.Hand;
+                LblStatus.Text = "CONCLUIDO";
+                LblStatus.ForeColor = Color.Green;
+                flagProcess = false;
+                PnFooter.Visible = true;
+                TxtPreviewQuery.Text = query;
+                return;
+            }
+
+            query = string.Empty;
+            PicStartImage.Image = Resources.anime_gif;
+            PicStartImage.Cursor = Cursors.WaitCursor;
+            LblStatus.Text = "PROCESSANDO";
+            LblStatus.ForeColor = Color.Gold;
+        }
+        #endregion
 
         private void FrmPrincipalMouseMove(object sender, MouseEventArgs e)
         {
@@ -135,48 +225,9 @@ namespace ConsumerSQLtoExcel
                 MessageBox.Show("Script cancelado!", "Excel to SQL", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
-        private async void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void FlowScripts_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Test");
-        }
-
-        private void TimerScriptChangedTick(object sender, EventArgs e)
-        {
-            if (Settings.Default.ScriptInUse != scriptConfig.ScriptName)
-            {
-                foreach (UcScript scr in FlowScripts.Controls)
-                {
-                    if (scr.IsActive)
-                    {
-                        scriptConfig = scr.GetScript();
-                    }
-                }
-            }
-
-            LblScriptAtual.Text = scriptConfig?.ScriptName ?? "Nenhum script selecionado";
-        }
-
-        private void TimerIsAllOkTick(object sender, EventArgs e)
-        {
-            if (scriptConfig is not null)
-            {
-                if (foldersMap is not null)
-                {
-                    if (foldersMap.Folders is not null)
-                    {
-                        if (foldersMap.Folders[0] is not null)
-                        {
-                            PnSectionBotton.Visible = true;
-                        }
-                    }
-                }
-            }
         }
 
         private async void PicStartImageClick(object sender, EventArgs e)
@@ -184,32 +235,46 @@ namespace ConsumerSQLtoExcel
             ChangeStep();
 
             var data = await ExcelController.GetDataExcelAsync(foldersMap.Folders[0].Path, scriptConfig, CkbFirstLine.Checked, PgBarProcess);
-            query = QueryBuilder.BuildInsertQuery(scriptConfig, data);
+            (query, parameters) = QueryBuilder.BuildInsertQuery2(scriptConfig, data);
 
-            if(query != string.Empty)
+            if (query != string.Empty)
             {
                 flagProcess = true;
                 ChangeStep();
             }
         }
-
-        private void ChangeStep()
+        private void CkArquivoSelecionado_CheckedChanged(object sender, EventArgs e)
         {
-            if (flagProcess)
-            {
-                PicStartImage.Image = Resources.go_image;
-                PicStartImage.Cursor = Cursors.Hand;
-                LblStatus.Text = "CONCLUIDO";
-                LblStatus.ForeColor = Color.Green;
-                flagProcess = false;
-                return;
-            }
 
-            query = string.Empty;
-            PicStartImage.Image = Resources.anime_gif;
-            PicStartImage.Cursor = Cursors.WaitCursor;
-            LblStatus.Text = "PROCESSANDO";
-            LblStatus.ForeColor = Color.Gold;
+            CkArquivoSelecionado.Checked = checkFile;
+        }
+
+        private void CkScript_CheckedChanged(object sender, EventArgs e)
+        {
+
+            CkScript.Checked = checkScript;
+
+        }
+
+        private void CkConexao_CheckedChanged(object sender, EventArgs e)
+        {
+
+            CkConexao.Checked = checkCon;
+
+        }
+
+        private void BtnTry_Click(object sender, EventArgs e)
+        {
+            TimerIsAllOk.Start();
+        }
+
+        private async void BtnExecuteClick(object sender, EventArgs e)
+        {
+            string con = RepositorieBase.GetConnectionString(scriptConfig.ConnectionString);
+            InsertControl insert = new ();
+            var count = await insert.InsertDataFromExcelToDatabase(query, parameters, con);
+
+            TxtLinhas.Text = $"Foram inseridos {count} registros com sucesso!";
         }
     }
 }
