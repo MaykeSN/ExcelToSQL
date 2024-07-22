@@ -229,7 +229,7 @@ namespace ConsumerSQLtoExcel
             // 
             PgBarProcess.Location = new Point(111, 75);
             PgBarProcess.Name = "PgBarProcess";
-            PgBarProcess.Size = new Size(570, 29);
+            PgBarProcess.Size = new Size(630, 29);
             PgBarProcess.TabIndex = 0;
             // 
             // pictureBox1

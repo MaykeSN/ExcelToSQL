@@ -20,7 +20,6 @@ namespace ConsumerSQLtoExcel.Views
     public partial class FrmModalCreateScript : Form
     {
         private string? filePath;
-        private Scripts Scripts;
         List<Columns> cols = [];
         public FrmModalCreateScript()
         {

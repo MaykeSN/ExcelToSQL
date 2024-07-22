@@ -70,26 +70,28 @@ namespace ConsumerSQLtoExcel
             if (scriptConfig is not null)
             {
                 checkScript = true;
-                if (foldersMap is not null)
+            }
+
+            if (foldersMap is not null)
+            {
+                if (foldersMap.Folders is not null)
                 {
-                    if (foldersMap.Folders is not null)
+                    if (foldersMap.Folders[0] is not null)
                     {
-                        if (foldersMap.Folders[0] is not null)
-                        {
-                            checkFile = true;
-                            string con = RepositorieBase.GetConnectionString(scriptConfig.ConnectionString);
-                            var result = await RepositorieBase.IsOkConnection(con);
+                        checkFile = true;
 
-                            TimerIsAllOk.Enabled = false;
-
-                            if (result)
-                            {
-                                checkCon = true;
-                                PnSectionBotton.Visible = true;
-                            }
-
-                        }
                     }
+                }
+            }
+
+            if (checkScript)
+            {
+                string con = RepositorieBase.GetConnectionString(scriptConfig.ConnectionString);
+                var result = await RepositorieBase.IsOkConnection(con);
+                if (result)
+                {
+                    checkCon = true;
+                    PnSectionBotton.Visible = true;
                 }
             }
 
@@ -97,6 +99,8 @@ namespace ConsumerSQLtoExcel
         }
         private void TimerScriptChangedTick(object sender, EventArgs e)
         {
+            if(scriptConfig is null) { return; }
+
             if (Settings.Default.ScriptInUse != scriptConfig.ScriptName)
             {
                 foreach (UcScript scr in FlowScripts.Controls)
